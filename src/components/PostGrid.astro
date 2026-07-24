@@ -1,0 +1,14 @@
+---
+interface Props {
+	title?: string;
+}
+
+const { title = 'Post Grid' } = Astro.props;
+---
+
+<section>
+	<h1>{title}</h1>
+</section>
+
+<style>
+</style>

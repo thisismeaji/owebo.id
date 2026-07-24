@@ -1,0 +1,14 @@
+---
+interface Props {
+	title?: string;
+}
+
+const { title = 'Footer' } = Astro.props;
+---
+
+<footer>
+	<h1>{title}</h1>
+</footer>
+
+<style>
+</style>

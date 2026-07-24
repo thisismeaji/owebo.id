@@ -1,0 +1,86 @@
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+@import '@fontsource/poppins/latin-700.css';
+
+:root {
+	font-family: 'Poppins';
+	color: #111111;
+	background: #ffffff;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	width: 100%;
+	min-height: 100%;
+}
+
+body {
+	font-family: inherit;
+	background: #ffffff;
+}
+
+main, header, footer{
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1200px;
+	padding: 16px;
+}
+
+
+h1 {
+	font-size: 48px;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+h2 {
+	font-size: 32px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+h2 {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+@media screen and (min-width:768px) and (max-width:1024px) {
+	h1{
+		font-size: 40px;
+	}
+
+	h2{
+		font-size: 28px;
+	}
+
+	h3{
+		font-size: 20px;
+	}
+}
+
+@media screen and (max-width:768px) {
+	
+	h1{
+		font-size: 32px;
+	}
+
+	h2{
+		font-size: 24px;
+	}
+
+	h3{
+		font-size: 16px;
+	}
+}

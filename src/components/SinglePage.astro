@@ -1,0 +1,14 @@
+---
+interface Props {
+	title?: string;
+}
+
+const { title = 'Single Page' } = Astro.props;
+---
+
+<section>
+	<h1>{title}</h1>
+</section>
+
+<style>
+</style>

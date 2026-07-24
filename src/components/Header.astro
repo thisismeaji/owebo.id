@@ -1,0 +1,14 @@
+---
+interface Props {
+	title?: string;
+}
+
+const { title = 'Header' } = Astro.props;
+---
+
+<header>
+	<h1>{title}</h1>
+</header>
+
+<style>
+</style>
