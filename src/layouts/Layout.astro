@@ -3,6 +3,80 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
 import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
+
+interface Props {
+	title?: string;
+	description?: string;
+	path?: string;
+	image?: string;
+}
+
+const {
+	title = 'Owebo',
+	description = 'Halaman dummy Owebo untuk kebutuhan pengembangan website.',
+	path = Astro.url.pathname,
+	image = '/favicon.svg',
+} = Astro.props;
+
+const siteName = 'Owebo';
+const siteUrl = 'https://owebo.id';
+const canonicalUrl = new URL(path, siteUrl).toString();
+const imageUrl = new URL(image, siteUrl).toString();
+const pageTitle = title === siteName ? siteName : `${title} | ${siteName}`;
+const schema = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Organization',
+			'@id': `${siteUrl}/#organization`,
+			name: siteName,
+			url: siteUrl,
+			logo: imageUrl,
+		},
+		{
+			'@type': 'WebSite',
+			'@id': `${siteUrl}/#website`,
+			name: siteName,
+			url: siteUrl,
+			publisher: {
+				'@id': `${siteUrl}/#organization`,
+			},
+			inLanguage: 'id-ID',
+		},
+		{
+			'@type': 'WebPage',
+			'@id': `${canonicalUrl}#webpage`,
+			url: canonicalUrl,
+			name: pageTitle,
+			description,
+			isPartOf: {
+				'@id': `${siteUrl}/#website`,
+			},
+			about: {
+				'@id': `${siteUrl}/#organization`,
+			},
+			inLanguage: 'id-ID',
+		},
+		{
+			'@type': 'BreadcrumbList',
+			'@id': `${canonicalUrl}#breadcrumb`,
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Beranda',
+					item: siteUrl,
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: title,
+					item: canonicalUrl,
+				},
+			],
+		},
+	],
+};
 ---
 
 <!doctype html>
@@ -20,7 +94,22 @@ import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Owebo</title>
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="id_ID" />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={imageUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageUrl} />
+		<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 	</head>
 	<body>
 		<Header />
