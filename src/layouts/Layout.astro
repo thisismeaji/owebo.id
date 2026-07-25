@@ -2,12 +2,6 @@
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
-import poppins200 from '@fontsource/poppins/files/poppins-latin-200-normal.woff2?url';
-import poppins300 from '@fontsource/poppins/files/poppins-latin-300-normal.woff2?url';
-import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
-import poppins500 from '@fontsource/poppins/files/poppins-latin-500-normal.woff2?url';
-import poppins600 from '@fontsource/poppins/files/poppins-latin-600-normal.woff2?url';
-import poppins700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2?url';
 
 interface Props {
 	title?: string;
@@ -28,14 +22,6 @@ const siteUrl = 'https://owebo.id';
 const canonicalUrl = new URL(path, siteUrl).toString();
 const imageUrl = new URL(image, siteUrl).toString();
 const pageTitle = title === siteName ? siteName : `${title} | ${siteName}`;
-const fontPreloads = [
-	poppins200,
-	poppins300,
-	poppins400,
-	poppins500,
-	poppins600,
-	poppins700,
-];
 const schema = {
 	'@context': 'https://schema.org',
 	'@graph': [
@@ -97,16 +83,6 @@ const schema = {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-		{fontPreloads.map((font) => (
-			<link
-				rel="preload"
-				href={font}
-				as="font"
-				type="font/woff2"
-				crossorigin
-			/>
-		))}
-		<link rel="preload" href="/images/thumbnail/thumbnail.png" as="image" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
