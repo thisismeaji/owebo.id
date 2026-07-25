@@ -1,14 +1,192 @@
 ---
-interface Props {
-	title?: string;
-}
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-const { title = 'Header' } = Astro.props;
+const isActive = (href: string) => {
+	return href === '/'
+		? currentPath === '/'
+		: currentPath === href || currentPath.startsWith(`${href}/`);
+};
+
 ---
 
 <header>
-	<h1>{title}</h1>
+	<nav>
+		<a href="/">
+			<span class="logo">
+				<img src="/images/logo.png" alt="logo owebo.id">
+				Owebo.id
+			</span>
+		</a>
+		<ul>
+			<li><a class:list={{ active: isActive('/') }} href="/">Beranda</a></li>
+			<li><a class:list={{ active: isActive('/blog') }} href="/blog">Blog</a></li>
+		</ul>
+		<div class="overlay"></div>
+		<div class="menu">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+	</nav>
 </header>
 
+<script>
+	const menu = document.querySelector('.menu');
+	const navList = document.querySelector('nav ul');
+	const overlay = document.querySelector('.overlay');
+	const navLinks = document.querySelectorAll('nav ul a');
+
+	const closeMenu = () => {
+		navList?.classList.remove('active');
+		overlay?.classList.remove('active');
+	};
+
+	menu?.addEventListener('click', () => {
+		navList?.classList.toggle('active');
+		overlay?.classList.toggle('active');
+	});
+
+	overlay?.addEventListener('click', closeMenu);
+	navLinks.forEach((link) => {
+		link.addEventListener('click', (event) => {
+			const href = link.getAttribute('href');
+
+			if (!navList?.classList.contains('active') || !href) {
+				return;
+			}
+
+			event.preventDefault();
+			closeMenu();
+
+			window.setTimeout(() => {
+				window.location.href = href;
+			}, 300);
+		});
+	});
+</script>
+
 <style>
+	header{
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		background-color: #ffffff;
+	}
+
+	.logo{
+		display: flex;
+		align-items:center;
+		justify-content: center;
+	}
+
+	.logo img{
+		width:32px;
+		
+	}
+
+	nav > a{
+		font-size: 20px;
+		font-weight: 600;
+		color: inherit;
+		text-decoration:none;
+		position: relative;
+	}
+
+	nav{
+		display: flex;
+		align-items:center;
+		justify-content: space-between;
+	}
+
+	ul {
+		display: flex;
+		align-items:center;
+		justify-content: space-between;
+		gap: 16px;
+		list-style: none;
+	}
+
+	.overlay{
+		display: none;
+	}
+
+	nav ul a{
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--muted);
+		text-decoration: none;
+	}
+
+	nav ul a:hover{
+		color: var(--accent);
+	}
+
+	nav ul a.active{
+		color: var(--accent);
+	}
+
+	.menu{
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 6px;
+		cursor: pointer;
+	}
+
+	.menu span{
+		display: inline-block;
+		width: 24px;
+		height: 1px;
+		background-color: #000000;
+	}
+
+	@media screen and (min-width:768px) and (max-width:1024px){
+		
+	}
+	@media screen and (max-width:768px){
+		.menu{
+			display: flex;
+			position: relative;
+			z-index: 40;
+		}
+
+		ul{
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 80%;
+			height: 100%;
+			min-height: 100vh;
+			background-color: #ffffff;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+			padding: 16px;
+			transform: translateX(-100%);
+			transition: transform 0.3s ease;
+			z-index: 30;
+		}
+
+		ul.active{
+			transform: translateX(0);
+		}
+
+		.overlay{
+			display: block;
+			position: fixed;
+			inset: 0;
+			background-color: rgba(255, 255, 255, 0.35);
+			backdrop-filter: blur(6px);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+			z-index: 25;
+		}
+
+		.overlay.active{
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
 </style>
