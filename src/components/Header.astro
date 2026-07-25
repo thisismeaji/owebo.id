@@ -71,25 +71,51 @@ const isActive = (href: string) => {
 		top: 0;
 		z-index: 20;
 		background-color: #ffffff;
+		border-bottom: 1px solid var(--border);
 	}
 
 	.logo{
 		display: flex;
 		align-items:center;
 		justify-content: center;
+		position: relative;
+		z-index: 1;
 	}
 
 	.logo img{
-		width:32px;
+		width:28px;
 		
 	}
 
 	nav > a{
-		font-size: 20px;
+		font-size: 16px;
 		font-weight: 600;
 		color: inherit;
 		text-decoration:none;
 		position: relative;
+		transition: color 0.3s ease-in-out;
+	}
+
+	nav > a::after{
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2;
+		height: 2px;
+		background-color: var(--accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.3s ease-in-out;
+	}
+
+	nav > a:hover{
+		color: var(--accent);
+	}
+
+	nav > a:hover::after{
+		transform: scaleX(1);
 	}
 
 	nav{
@@ -115,14 +141,32 @@ const isActive = (href: string) => {
 		font-weight: 500;
 		color: var(--muted);
 		text-decoration: none;
+		background-image: linear-gradient(var(--accent), var(--accent));
+		background-repeat: no-repeat;
+		background-position: left bottom;
+		background-size: 0% 2px;
+		transition: color 0.3s ease-in-out, background-size 0.3s ease-in-out;
 	}
 
 	nav ul a:hover{
 		color: var(--accent);
+		background-size: 100% 2px;
 	}
 
 	nav ul a.active{
 		color: var(--accent);
+		background-size: 100% 2px;
+		animation: activeUnderline 0.3s ease-in-out;
+	}
+
+	@keyframes activeUnderline{
+		from{
+			background-size: 0% 2px;
+		}
+
+		to{
+			background-size: 100% 2px;
+		}
 	}
 
 	.menu{
@@ -147,8 +191,9 @@ const isActive = (href: string) => {
 	@media screen and (max-width:768px){
 		.menu{
 			display: flex;
-			position: relative;
-			z-index: 40;
+			position: fixed;
+			top: 26px;
+			right: 16px;
 		}
 
 		ul{
@@ -164,7 +209,7 @@ const isActive = (href: string) => {
 			align-items: flex-start;
 			padding: 16px;
 			transform: translateX(-100%);
-			transition: transform 0.3s ease;
+			transition: transform 0.3s ease-in-out;
 			z-index: 30;
 		}
 

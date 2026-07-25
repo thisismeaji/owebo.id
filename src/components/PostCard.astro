@@ -51,11 +51,15 @@ interface Props {
 		background-color: var(--border);
 		border-radius: 100px;
 		font-size: 12px;
-		transition: all 0.3 ease-in-out;
+		background-image: linear-gradient(currentColor, currentColor);
+		background-repeat: no-repeat;
+		background-position: center calc(100% - 3px);
+		background-size: 0% 1px;
+		transition: background-size 0.3s ease-in-out;
 	}
 
 	.meta a:hover{
-		color: #101010;
+		background-size: calc(100% - 32px) 1px;
 	}
 
 	h2{

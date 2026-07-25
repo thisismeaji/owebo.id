@@ -1,14 +1,70 @@
 ---
-interface Props {
-	title?: string;
-}
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-const { title = 'Footer' } = Astro.props;
+const isActive = (href: string) => {
+	return href === '/'
+		? currentPath === '/'
+		: currentPath === href || currentPath.startsWith(`${href}/`);
+};
 ---
 
 <footer>
-	<h1>{title}</h1>
+	<p>© 2026 Owebo.id - All rights reserved.</p>
+	<ul>
+		<li><a class:list={{ active: isActive('/kontak') }} href="/kontak">Kontak</a></li>
+		<li><a class:list={{ active: isActive('/kebijakan-privasi') }} href="/kebijakan-privasi">Kebijakan Privasi</a></li>
+		<li><a class:list={{ active: isActive('/syarat-dan-ketentuan') }} href="/syarat-dan-ketentuan">Syarat dan Ketentuan</a></li>
+	</ul>
 </footer>
 
 <style>
+	footer{
+		display: flex;
+		align-items:center;
+		justify-content: space-between;
+		font-size: 14px;
+		font-weight: 500;
+		border-top: 1px solid var(--border);
+	}
+
+	ul{
+		display: flex;
+		align-items:center;
+		justify-content: center;
+		list-style: none;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+
+	a{
+		text-decoration: none;
+		color: var(--muted);
+		background-image: linear-gradient(var(--accent), var(--accent));
+		background-repeat: no-repeat;
+		background-position: left bottom;
+		background-size: 0% 2px;
+		transition: color 0.3s ease-in-out, background-size 0.3s ease-in-out;
+	}
+
+	a:hover{
+		color: var(--accent);
+		background-size: 100% 2px;
+	}
+
+	a.active{
+		color: var(--accent);
+		background-size: 100% 2px;
+	}
+
+	@media screen and (min-width:768px) and (max-width:1024px){
+		
+	}
+	@media screen and (max-width:768px){
+		
+		footer{
+			flex-direction: column-reverse;
+			align-items: center;
+			gap:16px;
+		}
+	}
 </style>
