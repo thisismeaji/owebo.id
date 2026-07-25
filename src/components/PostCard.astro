@@ -8,7 +8,7 @@ interface Props {
 
 <article>
 	<a href="post-url">
-		<img src="/images/thumbnail/thumbnail.png" alt="Post Title">
+		<img src="/images/thumbnail/thumbnail.png" alt="Post Title" width="1920" height="1080">
 	</a>
 	<div class="meta">
 		<time datetime="">25 Juli, 2026</time>
@@ -27,8 +27,12 @@ interface Props {
 		text-decoration: none;
 	}
 	img{
+		display: block;
 		width: 100%;
 		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		background-color: var(--border);
 		border-radius: 10px;
 	}
 
