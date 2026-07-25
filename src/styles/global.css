@@ -1,3 +1,5 @@
+@import '@fontsource/poppins/latin-200.css';
+@import '@fontsource/poppins/latin-300.css';
 @import '@fontsource/poppins/latin-400.css';
 @import '@fontsource/poppins/latin-500.css';
 @import '@fontsource/poppins/latin-600.css';
@@ -5,12 +7,15 @@
 
 :root {
 	font-family: 'Poppins';
-	color: #111111;
+	color: #101010;
 	background: #ffffff;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	-moz-osx-font-smoothing: grayscale;	
+	--accent: #6032EC;
+	--muted: #777777;
+	--border: #eeeeee;
 }
 
 * {

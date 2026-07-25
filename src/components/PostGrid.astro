@@ -1,14 +1,28 @@
 ---
-interface Props {
-	title?: string;
-}
-
-const { title = 'Post Grid' } = Astro.props;
+import PostCard from '../components/PostCard.astro';
 ---
 
 <section>
-	<h1>{title}</h1>
+	{Array.from({ length: 6 }).map(() => (
+		<PostCard />
+	))}
 </section>
 
 <style>
+	section{
+		display:grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: auto;
+		gap: 32px;
+	}
+	@media screen and (min-width:768px) and (max-width:1024px){
+		section{
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+	@media screen and (max-width:768px){
+		section{
+			grid-template-columns: 1fr;
+		}
+	}
 </style>
