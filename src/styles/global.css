@@ -53,9 +53,9 @@
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;	
-	--accent: #6032EC;
-	--muted: #3f3f3f;
+	-moz-osx-font-smoothing: grayscale;
+	--accent: #5B21B6;
+	--muted: #71717A;
 	--border: #eeeeee;
 }
 
@@ -76,7 +76,9 @@ body {
 	background: #ffffff;
 }
 
-main, header, footer{
+main,
+header,
+footer {
 	margin: 0 auto;
 	width: 100%;
 	max-width: 1200px;
@@ -103,30 +105,30 @@ h2 {
 }
 
 @media screen and (min-width:768px) and (max-width:1024px) {
-	h1{
+	h1 {
 		font-size: 40px;
 	}
 
-	h2{
+	h2 {
 		font-size: 28px;
 	}
 
-	h3{
+	h3 {
 		font-size: 20px;
 	}
 }
 
 @media screen and (max-width:768px) {
-	
-	h1{
+
+	h1 {
 		font-size: 32px;
 	}
 
-	h2{
+	h2 {
 		font-size: 24px;
 	}
 
-	h3{
+	h3 {
 		font-size: 16px;
 	}
 }
