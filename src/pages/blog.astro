@@ -1,8 +1,17 @@
 ---
+import { getCollection } from 'astro:content';
 import PostGrid from '../components/PostGrid.astro';
 import Layout from '../layouts/Layout.astro';
+
+const posts = (await getCollection('blog'))
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 ---
 
-<Layout>
-	<PostGrid/>
+<Layout
+	title="Blog"
+	description="Artikel terbaru dari Owebo seputar website, SEO, dan pengembangan digital."
+	path="/blog"
+>
+	<PostGrid posts={posts}/>
 </Layout>

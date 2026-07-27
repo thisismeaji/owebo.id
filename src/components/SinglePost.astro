@@ -1,19 +1,40 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 
+interface Props {
+	post: CollectionEntry<'blog'>;
+	Content: AstroComponentFactory;
+}
+
+const { post, Content } = Astro.props;
+const publishedAt = post.data.publishedAt.toLocaleDateString('id-ID', {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+});
 ---
 
 <article>
-	<span class="category">Adipiscing</span>
-	<h1>Lorem ipsum dolor sit amet, consectetur adipiscing nec.</h1>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non suscipit enim. Ut dignissim elementum lobortis. Donec a lobortis elit viverra fusce.</p>
+	<span class="category">{post.data.category}</span>
+	<h1>{post.data.title}</h1>
+	<p>{post.data.excerpt}</p>
 	<div class="meta">
-		<time datetime="">25 Juli, 2026</time>
+		<time datetime={post.data.publishedAt.toISOString()}>{publishedAt}</time>
 		<div class="author">
-			<span>Ajisaka Kamandanu</span>
-			<span>Penulis</span>
+			<span>{post.data.author}</span>
+			<span>{post.data.authorRole}</span>
 		</div>
 	</div>
-	<img src="/images/thumbnail/thumbnail.png" alt="post title">
+	<img
+		src={post.data.image}
+		alt={post.data.imageAlt}
+		width={post.data.imageWidth}
+		height={post.data.imageHeight}
+	>
+	<div class="content">
+		<Content />
+	</div>
 </article>
 
 <style>
@@ -47,6 +68,39 @@
 
 	img{
 		width: 100%;
+		height: auto;
+		display: block;
 		border-radius: 20px;
+	}
+
+	.content{
+		width: 100%;
+		max-width: 800px;
+	}
+
+	.content :global(*) + *{
+		margin-top: 16px;
+	}
+
+	.content :global(h2),
+	.content :global(h3){
+		margin-top: 32px;
+	}
+
+	.content :global(p),
+	.content :global(li),
+	.content :global(blockquote){
+		color: var(--muted);
+		line-height: 1.8;
+	}
+
+	.content :global(ul),
+	.content :global(ol){
+		padding-left: 24px;
+	}
+
+	.content :global(blockquote){
+		border-left: 3px solid var(--accent);
+		padding-left: 16px;
 	}
 </style>

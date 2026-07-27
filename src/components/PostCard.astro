@@ -1,23 +1,38 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
-	postUrl?: string;
-	categoryUrl?: string;
+	post: CollectionEntry<'blog'>;
 }
 
+const { post } = Astro.props;
+const postSlug = post.id.split('/').pop() ?? post.id;
+const href = `/blog/${postSlug}`;
+const categoryHref = `/blog/${post.data.categorySlug}`;
+const publishedAt = post.data.publishedAt.toLocaleDateString('id-ID', {
+	day: 'numeric',
+	month: 'long',
+	year: 'numeric',
+});
 ---
 
 <article>
-	<a href="/blog/post-url">
-		<img src="/images/thumbnail/thumbnail.png" alt="Post Title" width="1920" height="1080">
+	<a href={href}>
+		<img
+			src={post.data.image}
+			alt={post.data.imageAlt}
+			width={post.data.imageWidth}
+			height={post.data.imageHeight}
+		>
 	</a>
 	<div class="meta">
-		<time datetime="">25 Juli, 2026</time>
-		<a href="category-url" class="category">Adipiscing</a>
+		<time datetime={post.data.publishedAt.toISOString()}>{publishedAt}</time>
+		<a href={categoryHref} class="category">{post.data.category}</a>
 	</div>
 	<h2>
-		<a href="/blog/post-url">Lorem ipsum dolor sit amet, consectetur adipiscing nec.</a>
+		<a href={href}>{post.data.title}</a>
 	</h2>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non suscipit enim. Ut dignissim elementum lobortis. Donec a lobortis elit viverra fusce.</p>
+	<p>{post.data.excerpt}</p>
 </article>
 
 <style>
@@ -63,7 +78,7 @@ interface Props {
 	}
 
 	h2{
-		font-size: 18px;
+		font-size: 20px;
 		margin-bottom: 8px;
 		transition: all 0.3 ease-in-out;
 	}

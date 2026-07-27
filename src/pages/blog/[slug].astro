@@ -1,0 +1,71 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SinglePost from '../../components/SinglePost.astro';
+import PostGrid from '../../components/PostGrid.astro';
+
+export async function getStaticPaths() {
+	const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
+	const postPaths = posts.map((post) => ({
+		params: { slug: post.id.split('/').pop() ?? post.id },
+		props: { type: 'post', post, posts },
+	}));
+	const categoryMap = new Map<string, string>();
+
+	posts.forEach((post) => {
+		categoryMap.set(post.data.categorySlug, post.data.category);
+	});
+
+	const categoryPaths = Array.from(categoryMap.entries()).map(([categorySlug, category]) => ({
+		params: { slug: categorySlug },
+		props: { type: 'category', category, posts },
+	}));
+
+	return [...postPaths, ...categoryPaths];
+}
+
+const { type, post, category, posts } = Astro.props;
+const Content = type === 'post' && post ? (await render(post)).Content : undefined;
+const categoryPosts = type === 'category'
+	? posts
+		.filter((entry) => entry.data.categorySlug === Astro.params.slug)
+		.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+	: [];
+---
+
+{type === 'post' && post && Content ? (
+	<Layout
+		title={post.data.metaTitle}
+		description={post.data.metaDescription}
+		path={post.data.canonicalPath}
+		image={post.data.image}
+	>
+		<SinglePost post={post} Content={Content} />
+	</Layout>
+) : (
+	<Layout
+		title={`Kategori ${category}`}
+		description={`Artikel Owebo dalam kategori ${category}.`}
+		path={`/blog/${Astro.params.slug}`}
+	>
+		<section class="category-header">
+			<span>Kategori</span>
+			<h1>{category}</h1>
+		</section>
+		<PostGrid posts={categoryPosts} />
+	</Layout>
+)}
+
+<style>
+	.category-header{
+		margin-bottom: 32px;
+	}
+
+	.category-header span{
+		display: inline-block;
+		margin-bottom: 8px;
+		color: var(--muted);
+		font-size: 14px;
+		font-weight: 500;
+	}
+</style>
