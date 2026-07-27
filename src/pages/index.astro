@@ -1,8 +1,32 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
+
+const siteUrl = 'https://owebo.id';
+const homeSchema = {
+	'@type': 'Service',
+	'@id': `${siteUrl}/#website-development-service`,
+	url: siteUrl,
+	name: 'Jasa Pembuatan Website',
+	description: 'Jasa pembuatan website terbaik di Indonesia dari Owebo.',
+	provider: {
+		'@id': `${siteUrl}/#organization`,
+	},
+	areaServed: {
+		'@type': 'Country',
+		name: 'Indonesia',
+	},
+	serviceType: 'Jasa pembuatan website',
+};
 ---
 
-<Layout>
+<Layout
+	title="Owebo"
+	description="Jasa pembuatan website terbaik di Indonesia."
+	path="/"
+	image="/images/jasa-pembuatan-website-terbaik-di-indonesia.webp"
+	pageType="HomePage"
+	schema={homeSchema}
+>
 	<Hero/>
 </Layout>

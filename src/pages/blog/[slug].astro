@@ -31,6 +31,56 @@ const categoryPosts = type === 'category'
 		.filter((entry) => entry.data.categorySlug === Astro.params.slug)
 		.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
 	: [];
+const siteUrl = 'https://owebo.id';
+const postUrl = post ? new URL(post.data.canonicalPath, siteUrl).toString() : '';
+const postImageUrl = post ? new URL(post.data.image, siteUrl).toString() : '';
+const articleSchema = post ? {
+	'@type': 'BlogPosting',
+	'@id': `${postUrl}#blogposting`,
+	url: postUrl,
+	name: post.data.title,
+	mainEntityOfPage: {
+		'@type': 'WebPage',
+		'@id': `${postUrl}#webpage`,
+	},
+	headline: post.data.title,
+	description: post.data.metaDescription,
+	image: {
+		'@type': 'ImageObject',
+		url: postImageUrl,
+		width: post.data.imageWidth,
+		height: post.data.imageHeight,
+	},
+	datePublished: post.data.publishedAt.toISOString(),
+	dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
+	author: {
+		'@type': 'Person',
+		name: post.data.author,
+	},
+	publisher: {
+		'@id': `${siteUrl}/#organization`,
+	},
+	isPartOf: {
+		'@id': `${siteUrl}/blog#blog`,
+	},
+	articleSection: post.data.category,
+	keywords: post.data.keywords.join(', '),
+	inLanguage: 'id-ID',
+} : undefined;
+const categoryUrl = `${siteUrl}/blog/${Astro.params.slug}`;
+const categorySchema = type === 'category' ? [
+	{
+		'@type': 'ItemList',
+		'@id': `${categoryUrl}#post-list`,
+		name: `Daftar artikel kategori ${category}`,
+		itemListElement: categoryPosts.map((entry, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			url: `${siteUrl}/blog/${entry.id.split('/').pop() ?? entry.id}`,
+			name: entry.data.title,
+		})),
+	},
+] : undefined;
 ---
 
 {type === 'post' && post && Content ? (
@@ -39,6 +89,15 @@ const categoryPosts = type === 'category'
 		description={post.data.metaDescription}
 		path={post.data.canonicalPath}
 		image={post.data.image}
+		ogType="article"
+		titleSeparator="-"
+		titleSuffix="owebo.id"
+		breadcrumbs={[
+			{ name: 'Beranda', path: '/' },
+			{ name: 'Blog', path: '/blog' },
+			{ name: post.data.metaTitle, path: post.data.canonicalPath },
+		]}
+		schema={articleSchema}
 	>
 		<SinglePost post={post} Content={Content} />
 	</Layout>
@@ -47,6 +106,14 @@ const categoryPosts = type === 'category'
 		title={`Kategori ${category}`}
 		description={`Artikel Owebo dalam kategori ${category}.`}
 		path={`/blog/${Astro.params.slug}`}
+		image={categoryPosts[0]?.data.image ?? '/images/logo.png'}
+		pageType="CollectionPage"
+		breadcrumbs={[
+			{ name: 'Beranda', path: '/' },
+			{ name: 'Blog', path: '/blog' },
+			{ name: `Kategori ${category}`, path: `/blog/${Astro.params.slug}` },
+		]}
+		schema={categorySchema}
 	>
 		<section class="category-header">
 			<span>Kategori</span>

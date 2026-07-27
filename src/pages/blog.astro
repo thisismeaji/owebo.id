@@ -6,12 +6,48 @@ import Layout from '../layouts/Layout.astro';
 const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft)
 	.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+const siteUrl = 'https://owebo.id';
+const blogUrl = `${siteUrl}/blog`;
+const blogSchema = [
+	{
+		'@type': 'Blog',
+		'@id': `${blogUrl}#blog`,
+		url: blogUrl,
+		name: 'Blog Owebo',
+		description: 'Artikel terbaru dari Owebo seputar website, SEO, dan pengembangan digital.',
+		publisher: {
+			'@id': `${siteUrl}/#organization`,
+		},
+		blogPost: posts.map((post) => ({
+			'@id': `${siteUrl}/blog/${post.id.split('/').pop() ?? post.id}#blogposting`,
+		})),
+		inLanguage: 'id-ID',
+	},
+	{
+		'@type': 'ItemList',
+		'@id': `${blogUrl}#post-list`,
+		name: 'Daftar artikel Blog Owebo',
+		itemListElement: posts.map((post, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			url: `${siteUrl}/blog/${post.id.split('/').pop() ?? post.id}`,
+			name: post.data.title,
+		})),
+	},
+];
 ---
 
 <Layout
 	title="Blog"
 	description="Artikel terbaru dari Owebo seputar website, SEO, dan pengembangan digital."
 	path="/blog"
+	image={posts[0]?.data.image ?? '/images/logo.png'}
+	pageType="CollectionPage"
+	breadcrumbs={[
+		{ name: 'Beranda', path: '/' },
+		{ name: 'Blog', path: '/blog' },
+	]}
+	schema={blogSchema}
 >
 	<PostGrid posts={posts}/>
 </Layout>

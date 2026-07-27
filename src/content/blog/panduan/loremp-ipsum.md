@@ -14,7 +14,7 @@ imageWidth: 1920
 imageHeight: 1080
 metaTitle: "Lorem ipsum dolor sit amet, consectetur porttitor"
 metaDescription: "Contoh artikel dengan frontmatter SEO lengkap dan konten HTML untuk kebutuhan styling halaman blog Owebo."
-canonicalPath: "/blog/contoh-artikel-styling"
+canonicalPath: "/blog/loremp-ipsum"
 ogTitle: "Contoh Artikel untuk Styling Blog Owebo"
 ogDescription: "Gunakan artikel contoh ini untuk menguji tampilan post card, post grid, dan single post."
 keywords:

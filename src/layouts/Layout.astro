@@ -8,6 +8,15 @@ interface Props {
 	description?: string;
 	path?: string;
 	image?: string;
+	ogType?: string;
+	pageType?: string | string[];
+	titleSeparator?: string;
+	titleSuffix?: string;
+	breadcrumbs?: {
+		name: string;
+		path: string;
+	}[];
+	schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -15,13 +24,38 @@ const {
 	description = 'Halaman dummy Owebo untuk kebutuhan pengembangan website.',
 	path = Astro.url.pathname,
 	image = '/favicon.svg',
+	ogType = 'website',
+	pageType,
+	titleSeparator = '|',
+	titleSuffix,
+	breadcrumbs: customBreadcrumbs,
+	schema: pageSchema,
 } = Astro.props;
 
 const siteName = 'Owebo';
 const siteUrl = 'https://owebo.id';
 const canonicalUrl = new URL(path, siteUrl).toString();
 const imageUrl = new URL(image, siteUrl).toString();
-const pageTitle = title === siteName ? siteName : `${title} | ${siteName}`;
+const logoUrl = new URL('/images/logo.png', siteUrl).toString();
+const pageTitleSuffix = titleSuffix ?? siteName;
+const pageTitle = title === siteName ? siteName : `${title} ${titleSeparator} ${pageTitleSuffix}`;
+const currentPageType = pageType ?? (path === '/' ? 'HomePage' : 'WebPage');
+const breadcrumbs = customBreadcrumbs
+	? customBreadcrumbs.map((breadcrumb) => ({
+		name: breadcrumb.name,
+		item: new URL(breadcrumb.path, siteUrl).toString(),
+	}))
+	: path === '/'
+	? [{ name: 'Beranda', item: siteUrl }]
+	: [
+		{ name: 'Beranda', item: siteUrl },
+		{ name: title, item: canonicalUrl },
+	];
+const extraSchemas = pageSchema
+	? Array.isArray(pageSchema)
+		? pageSchema
+		: [pageSchema]
+	: [];
 const schema = {
 	'@context': 'https://schema.org',
 	'@graph': [
@@ -30,7 +64,7 @@ const schema = {
 			'@id': `${siteUrl}/#organization`,
 			name: siteName,
 			url: siteUrl,
-			logo: imageUrl,
+			logo: logoUrl,
 		},
 		{
 			'@type': 'WebSite',
@@ -43,7 +77,7 @@ const schema = {
 			inLanguage: 'id-ID',
 		},
 		{
-			'@type': 'WebPage',
+			'@type': currentPageType,
 			'@id': `${canonicalUrl}#webpage`,
 			url: canonicalUrl,
 			name: pageTitle,
@@ -59,21 +93,33 @@ const schema = {
 		{
 			'@type': 'BreadcrumbList',
 			'@id': `${canonicalUrl}#breadcrumb`,
+			itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+				'@type': 'ListItem',
+				position: index + 1,
+				name: breadcrumb.name,
+				item: breadcrumb.item,
+			})),
+		},
+		{
+			'@type': 'ItemList',
+			'@id': `${siteUrl}/#site-navigation`,
+			name: 'Navigasi utama Owebo',
 			itemListElement: [
 				{
-					'@type': 'ListItem',
+					'@type': 'SiteNavigationElement',
 					position: 1,
 					name: 'Beranda',
-					item: siteUrl,
+					url: siteUrl,
 				},
 				{
-					'@type': 'ListItem',
+					'@type': 'SiteNavigationElement',
 					position: 2,
-					name: title,
-					item: canonicalUrl,
+					name: 'Blog',
+					url: `${siteUrl}/blog`,
 				},
 			],
 		},
+		...extraSchemas,
 	],
 };
 ---
@@ -90,7 +136,7 @@ const schema = {
 		<meta name="description" content={description} />
 		<meta name="robots" content="index, follow" />
 		<link rel="canonical" href={canonicalUrl} />
-		<meta property="og:type" content="website" />
+		<meta property="og:type" content={ogType} />
 		<meta property="og:locale" content="id_ID" />
 		<meta property="og:site_name" content={siteName} />
 		<meta property="og:title" content={pageTitle} />
