@@ -48,17 +48,43 @@ const articleSchema = post ? {
 	image: {
 		'@type': 'ImageObject',
 		url: postImageUrl,
+		contentUrl: postImageUrl,
+		caption: post.data.imageAlt,
 		width: post.data.imageWidth,
 		height: post.data.imageHeight,
+		creditText: 'Owebo',
+		creator: {
+			'@type': 'Organization',
+			name: 'Owebo',
+		},
+		copyrightNotice: 'Owebo',
 	},
 	datePublished: post.data.publishedAt.toISOString(),
 	dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
 	author: {
 		'@type': 'Person',
 		name: post.data.author,
+		jobTitle: post.data.authorRole,
 	},
 	publisher: {
+		'@type': 'Organization',
 		'@id': `${siteUrl}/#organization`,
+		name: 'Owebo',
+		url: siteUrl,
+		logo: {
+			'@type': 'ImageObject',
+			url: `${siteUrl}/images/logo.png`,
+			contentUrl: `${siteUrl}/images/logo.png`,
+			width: 512,
+			height: 512,
+			caption: 'Logo Owebo',
+			creditText: 'Owebo',
+			creator: {
+				'@type': 'Organization',
+				name: 'Owebo',
+			},
+			copyrightNotice: 'Owebo',
+		},
 	},
 	isPartOf: {
 		'@id': `${siteUrl}/blog#blog`,

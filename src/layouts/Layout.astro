@@ -64,7 +64,20 @@ const schema = {
 			'@id': `${siteUrl}/#organization`,
 			name: siteName,
 			url: siteUrl,
-			logo: logoUrl,
+			logo: {
+				'@type': 'ImageObject',
+				url: logoUrl,
+				contentUrl: logoUrl,
+				width: 512,
+				height: 512,
+				caption: 'Logo Owebo',
+				creditText: siteName,
+				creator: {
+					'@type': 'Organization',
+					name: siteName,
+				},
+				copyrightNotice: siteName,
+			},
 		},
 		{
 			'@type': 'WebSite',
